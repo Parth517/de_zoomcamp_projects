@@ -3,3 +3,5 @@ python-dotenv
 streamlit
 fastapi
 pydantic
+apache-airflow-providers-docker
+apache-airflow-providers-google
