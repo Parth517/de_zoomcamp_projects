@@ -46,8 +46,11 @@ services:
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-postgres/airflow
-    # Use a single string for the command to avoid multiline parsing issues
-    command: bash -c "airflow db migrate && airflow users create --username airflow --password airflow --firstname Airflow --lastname Admin --role Admin --email admin@example.com"
+    command: >
+      bash -c "airflow db migrate &&
+      airflow users create --username airflow --password airflow --firstname Airflow --lastname Admin --role Admin --email admin@example.com &&
+      airflow connections add 'google_cloud_default' --conn-type 'google_cloud_platform' --conn-extra '{\"key_path\": \"/opt/airflow/google_credentials.json\", \"project\": \"dezoomcampproject-493714\"}'"
+
   # =========================
   # AIRFLOW WEBSERVER
   # =========================
@@ -65,12 +68,18 @@ services:
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-postgres/airflow
       AIRFLOW__CORE__LOAD_EXAMPLES: "False"
       ALPHA_VANTAGE_API_KEY: ${ALPHA_VANTAGE_API_KEY}
+      GOOGLE_APPLICATION_CREDENTIALS: /opt/airflow/google_credentials.json
+      AIRFLOW__API__AUTH_BACKENDS: 'airflow.api.auth.backend.basic_auth,airflow.api.auth.backend.session'
+      DBT_PROFILES_DIR: /opt/airflow/transformation
     volumes:
       - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
       - ./plugins:/opt/airflow/plugins
-      - /var/run/docker.sock:/var/run/docker.sock # REQUIRED for DockerOperator
-      - ./data:/opt/airflow/data
+      - ./ingestion:/opt/airflow/ingestion
+      - ./transformation:/opt/airflow/transformation
+      - ./google_credentials.json:/opt/airflow/google_credentials.json
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./data:/app/data
     command: webserver
 
   # =========================
@@ -88,10 +97,16 @@ services:
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-postgres/airflow
       AIRFLOW__CORE__LOAD_EXAMPLES: "False"
       ALPHA_VANTAGE_API_KEY: ${ALPHA_VANTAGE_API_KEY}
+      GOOGLE_APPLICATION_CREDENTIALS: /opt/airflow/google_credentials.json
+      AIRFLOW__API__AUTH_BACKENDS: 'airflow.api.auth.backend.basic_auth,airflow.api.auth.backend.session'
+      DBT_PROFILES_DIR: /opt/airflow/transformation
     volumes:
       - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
       - ./plugins:/opt/airflow/plugins
-      - /var/run/docker.sock:/var/run/docker.sock # REQUIRED
-      - ./data:/opt/airflow/data
+      - ./ingestion:/opt/airflow/ingestion
+      - ./transformation:/opt/airflow/transformation
+      - ./google_credentials.json:/opt/airflow/google_credentials.json
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./data:/app/data
     command: scheduler

@@ -1,0 +1,13 @@
+stock_analytics:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: service-account
+      project: dezoomcampproject-493714
+      dataset: market_data_bronze # Default dataset
+      threads: 4
+      keyfile: /opt/airflow/google_credentials.json
+      location: US
+      priority: interactive
+      retries: 1

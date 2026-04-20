@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: bronze
+    database: dezoomcampproject-493714
+    schema: market_data_bronze
+    tables:
+      - name: stock_prices

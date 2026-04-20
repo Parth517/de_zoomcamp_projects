@@ -6,6 +6,10 @@ ENV/
 
 # Secrets
 .env
+google_credentials.json
+*.tfstate
+*.tfstate.backup
+.terraform/
 
 # Data and Logs
 data/

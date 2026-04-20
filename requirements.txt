@@ -5,3 +5,6 @@ fastapi
 pydantic
 apache-airflow-providers-docker
 apache-airflow-providers-google
+pandas
+pyarrow
+dbt-bigquery
