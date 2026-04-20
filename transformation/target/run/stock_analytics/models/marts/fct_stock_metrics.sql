@@ -2,17 +2,17 @@
   
     
 
-    create or replace table `dezoomcampproject-493714`.`market_data_bronze_gold`.`fct_stock_metrics`
+    create or replace table `dezoomcampproject-493714`.`market_data_gold`.`fct_stock_metrics`
       
-    
-    
+    partition by price_date
+    cluster by symbol
 
     OPTIONS()
     as (
       
 
 WITH silver_data AS (
-    SELECT * FROM `dezoomcampproject-493714`.`market_data_bronze_silver`.`stg_stock_prices`
+    SELECT * FROM `dezoomcampproject-493714`.`market_data_silver`.`stg_stock_prices`
 ),
 
 computed_metrics AS (
@@ -39,6 +39,5 @@ SELECT
     ROUND(moving_avg_7d, 2) as moving_avg_7d,
     ROUND(daily_pct_change, 2) as daily_pct_change
 FROM computed_metrics
-ORDER BY symbol, price_date DESC
     );
   

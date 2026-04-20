@@ -1,6 +1,12 @@
 {{ config(
     materialized='table',
-    schema='gold'
+    schema='market_data_gold',
+    partition_by={
+      "field": "price_date",
+      "data_type": "date",
+      "granularity": "day"
+    },
+    cluster_by=["symbol"]
 ) }}
 
 WITH silver_data AS (
@@ -31,4 +37,3 @@ SELECT
     ROUND(moving_avg_7d, 2) as moving_avg_7d,
     ROUND(daily_pct_change, 2) as daily_pct_change
 FROM computed_metrics
-ORDER BY symbol, price_date DESC

@@ -1,6 +1,6 @@
 
 
-  create or replace view `dezoomcampproject-493714`.`market_data_bronze_silver`.`stg_stock_prices`
+  create or replace view `dezoomcampproject-493714`.`market_data_silver`.`stg_stock_prices`
   OPTIONS()
   as 
 

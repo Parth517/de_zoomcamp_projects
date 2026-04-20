@@ -6,6 +6,11 @@ services:
     build: ./frontend
     ports:
       - "8501:8501"
+    environment:
+      GOOGLE_APPLICATION_CREDENTIALS: /opt/credentials.json
+      GCP_PROJECT_ID: dezoomcampproject-493714
+    volumes:
+      - ./google_credentials.json:/opt/credentials.json
     depends_on:
       - backend
 

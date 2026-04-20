@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN pip install streamlit requests
+RUN pip install streamlit requests google-cloud-bigquery pandas-gbq plotly
 
 EXPOSE 8501
 

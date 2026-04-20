@@ -1,6 +1,12 @@
 {{ config(
     materialized='view',
-    schema='silver'
+    schema='market_data_silver',
+    partition_by={
+      "field": "price_date",
+      "data_type": "date",
+      "granularity": "day"
+    },
+    cluster_by=["symbol"]
 ) }}
 
 WITH source AS (
